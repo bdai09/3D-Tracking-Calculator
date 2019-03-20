@@ -1,30 +1,25 @@
 import React, { Component } from 'react';
 import './App.css';
-
-
-const isOperator = /[x/+‑]/,
-      endsWithOperator = /[x+‑/]$/,
-      clearStyle = {background: '#ac3939'},
-      operatorStyle = {background: '#666666'},
+const operatorStyle = {background: '#666666'},
       equalsStyle = {
         background: '#004466',
         position: 'absolute',
         height: 130,
         bottom: 5
       };
-      
-
+ 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      currentVal: '0',
-      prevVal: '0',
+      valNew: '0',
+      valOld: '0',
       formula: '',
       currentSign: 'pos',
-      lastClicked: ''
+      lastClicked: '',
+      beforeIs:''
     }
-    this.maxDigitWarning = this.maxDigitWarning.bind(this);
+    this.reachMax = this.reachMax.bind(this);
     this.handleOperators = this.handleOperators.bind(this);
     this.handleEvaluate = this.handleEvaluate.bind(this);
     this.cleanUp = this.cleanUp.bind(this);
@@ -33,115 +28,153 @@ class App extends Component {
   }
   cleanUp() {
     this.setState({
-      currentVal: '0',
-      prevVal: '0',
+      valNew: '0',
+      valOld: '0',
       formula: '',
       currentSign: 'pos',
-      lastClicked: ''
+      lastClicked: '',
+      beforeIs:''
     });
   }
-  maxDigitWarning() {
+  reachMax() {
     this.setState({
-      currentVal: 'Digit Limit Met',
-      prevVal: this.state.currentVal
+      valNew: 'Reach Limit',
+      valOld: this.state.valNew,
+      beforeIs:''
     });
-    setTimeout(() => this.setState({currentVal: this.state.prevVal}), 1000);
+    setTimeout(() => this.setState({valNew: this.state.valOld, beforeIs:'num'}), 1000);
+  }
+
+  handleNumbers(num) {
+    if (this.state.valNew==="Reach Limit") {
+      this.setState({beforeIs:''})
+    }else {
+        if(this.state.valNew.length > 21) {
+             this.reachMax();
+        }else {
+            if(this.state.beforeIs==='num'&&num.target.value!=='0'){
+               this.setState({
+               valNew:  /([x/+‑]0)$/.test(this.state.formula) ?this.state.valNew : (this.state.formula+num.target.value),
+               formula: /([x/+‑]0)$/.test(this.state.formula) ?this.state.formula : (this.state.formula +num.target.value),
+               beforeIs:'num'
+               });
+             }
+             if(this.state.beforeIs==='num'&&num.target.value==='0'){
+              this.setState({
+              valNew:  num.target.value,
+              formula: /([x/+‑]0)$/.test(this.state.formula) ?this.state.formula : (this.state.formula +num.target.value),
+              beforeIs:'num'
+              });
+            }
+            if(this.state.beforeIs==='operator'){
+                  this.setState({
+                  valNew: num.target.value,
+                  formula: this.state.formula+num.target.value,
+                  beforeIs:'num' 
+                 });
+             }
+           if(this.state.beforeIs===''&&num.target.value!=='0'){
+               this.setState({
+               valNew: num.target.value,
+               formula: num.target.value,
+               beforeIs:'num'
+               });
+             }
+             if(this.state.beforeIs===''&&num.target.value==='0'){
+              this.setState({
+              valNew: '0',
+              formula: '',
+              beforeIs:'num'
+              });
+            }
+    }
+  }}
+   
+  handleOperators(num) { 
+    if (this.state.valNew!=="Reach Limit") {
+      if(this.state.beforeIs===''){
+        this.setState({
+        valNew: '0',
+        formula: '',
+        beforeIs:''
+        });
+      }
+      if(this.state.beforeIs==='num'){
+        this.setState({
+        valNew: num.target.value,
+        formula: this.state.formula+num.target.value,
+        beforeIs:'operator'
+        });
+      }
+      if(this.state.beforeIs==='operator'){
+        this.setState({
+        valNew: this.state.valNew,
+        formula: this.state.formula,
+        beforeIs:'operator'
+        });
+      }
+    }
   }
   
-  handleEvaluate() {
-    if (!this.state.currentVal.includes('Limit')) {
+  handleEvaluate(){
+    if (this.state.valNew!=="Reach Limit") {
       let expression = this.state.formula;
-      if (endsWithOperator.test(expression)) expression = expression.slice(0, -1);
-      expression = expression.replace(/x/g, "*").replace(/‑/g, "-");
-      let answer = Math.round(1000000000000 * eval(expression)) / 1000000000000;
-      this.setState({
-        currentVal: answer.toString(),
+      if (this.state.beforeIs==='operator') { expression = expression.slice(0, -1);}
+        expression = expression.replace(/x/g, "*").replace(/‑/g, "-");
+        let answer = Math.round(1000000000000 * eval(expression)) / 1000000000000;
+        this.setState({
+        valNew: answer.toString(),
         formula: expression.replace(/\*/g, '⋅').replace(/-/g, '‑') + '=' + answer,
-        prevVal: answer,
-        evaluated: true
+        beforeIs: ''
       });
     }
   }
     
-  handleOperators(e) { 
-    if (!this.state.currentVal.includes('Limit')) {
-      this.setState({currentVal: e.target.value,evaluated: false});
-      if (this.state.formula.includes('=')) {
-        this.setState({formula: this.state.prevVal + e.target.value}); // comment 1
-      } else {
-        this.setState({ // comment 2
-          prevVal: !isOperator.test(this.state.currentVal) ? 
-            this.state.formula : 
-            this.state.prevVal,
-          formula: !isOperator.test(this.state.currentVal) ? 
-            this.state.formula += e.target.value : 
-            this.state.prevVal += e.target.value
-        });
-      }
-    }
-  }
-  
-  handleNumbers(e) {
-    if (!this.state.currentVal.includes('Limit')) {
-      this.setState({evaluated: false})
-      if (this.state.currentVal.length > 21) {
-        this.maxDigitWarning();
-      } else if (this.state.evaluated === true) {
-        this.setState({
-          currentVal: e.target.value,
-          formula: e.target.value != '0' ? e.target.value : '',
-        });
-      } else {
-        this.setState({
-          currentVal: 
-            this.state.currentVal == '0' || 
-            isOperator.test(this.state.currentVal) ? 
-            e.target.value : this.state.currentVal + e.target.value,
-          formula:  
-            this.state.currentVal == '0' && e.target.value == '0' ?
-            this.state.formula : 
-            /([^.0-9]0)$/.test(this.state.formula) ? 
-            this.state.formula.slice(0, -1) + e.target.value :
-            this.state.formula + e.target.value,
-        });
-      }
-    }
-  }
-
   handleDecimal() {
-    if (this.state.evaluated === true) {
-      this.setState({
-        currentVal: '0.',
-        formula: '0.',
-        evaluated: false});
-    } else if (!this.state.currentVal.includes('.') &&
-      !this.state.currentVal.includes('Limit')) {
-      this.setState({evaluated: false})
-      if (this.state.currentVal.length > 21) {
-        this.maxDigitWarning();
-      } else if (endsWithOperator.test(this.state.formula) || 
-        this.state.currentVal == '0' && this.state.formula === '') {
-        this.setState({
-          currentVal: '0.',
-          formula: this.state.formula + '0.'
-        });         
+    if (this.state.valNew!=="Reach Limit") {
+      if (this.state.valNew.length > 21) {
+        this.reachMax();
       } else {
-        this.setState({
-          currentVal: this.state.formula.match(/(-?\d+\.?\d*)$/)[0] + '.',
-          formula: this.state.formula + '.',
-        });
+
+        if(this.state.beforeIs==='num'){
+          this.setState({
+            valNew: '.',
+            formula: this.state.formula + '.',
+            beforeIs:'decimal'
+          }); 
+        }
+        if(this.state.beforeIs==='decimal'){
+          this.setState({
+            valNew: '.',
+            formula: this.state.formula,
+            beforeIs:'decimal'
+          }); 
+        } 
+        if(this.state.beforeIs==='operator'){
+          this.setState({
+            valNew: this.state.valNew,
+            formula: this.state.formula,
+            beforeIs:'operator'
+          }); 
+        }
+        if(this.state.beforeIs===''){
+          this.setState({
+            valNew: '0.',
+            formula: '0.',
+            beforeIs:'decimal'
+          }); 
+        }
       }
-    }
-  }
+  }}
 
   render() {
     return (
       <div className="App">
         <div className='App-body'>
           <div className="formulaScreen">{this.state.formula} </div>
-          <div id="display" className="outputScreen"> {this.state.currentVal} </div>
+          <div id="display" className="outputScreen"> {this.state.valNew} </div>
           <div>
-        <button id="clear"    value='AC' onClick={this.cleanUp} className='jumbo' style={clearStyle}>AC</button>
+        <button id="clear"    value='AC' onClick={this.cleanUp} className='jumbo' style={{background: '#ac3939'}}>AC</button>
         <button id="divide"   value='/'  onClick={this.handleOperators} style={operatorStyle}>/</button>
         <button id="multiply" value='x'  onClick={this.handleOperators} style={operatorStyle}>x</button>
         <button id="seven"    value='7'  onClick={this.handleNumbers} >7</button>
@@ -157,7 +190,12 @@ class App extends Component {
         <button id="three"    value='3'  onClick={this.handleNumbers} >3</button>
         <button id="zero"     value='0'  onClick={this.handleNumbers} className='jumbo'>0</button>
         <button id="decimal"  value='.'  onClick={this.handleDecimal} >.</button>
-        <button id="equals"   value='='  onClick={this.handleEvaluate} style={equalsStyle}>=</button>
+        <button id="equals"   value='='  onClick={this.handleEvaluate} style={{
+        background: '#004466',
+        position: 'absolute',
+        height: 130,
+        bottom: 5
+      }}>=</button>
       </div>
         </div>
       </div>
