@@ -9,7 +9,6 @@ class App extends Component {
       valOld: '0',
       formula: '',
       currentSign: 'pos',
-      lastClicked: '',
       beforeIs:''
     }
     this.reachMax = this.reachMax.bind(this);
@@ -25,7 +24,6 @@ class App extends Component {
       valOld: '0',
       formula: '',
       currentSign: 'pos',
-      lastClicked: '',
       beforeIs:''
     });
   }
@@ -167,7 +165,7 @@ class App extends Component {
           <div className="formulaScreen">{this.state.formula} </div>
           <div className="outputScreen"> {this.state.valNew} </div>
           <div>
-        <button value='AC' onClick={this.cleanUp} className='jumbo' style={{background: '#F55A3B'}}>AC</button>
+        <button value='AC' onClick={this.cleanUp} style={{width:160, background: '#F55A3B'}}>AC</button>
         <button value='/'  onClick={this.handleOperators} style={{background: '#F49753'}}>/</button>
         <button value='x'  onClick={this.handleOperators} style={{background: '#F49753'}}>x</button>
         <button value='7'  onClick={this.handleNumbers} >7</button>
@@ -181,21 +179,14 @@ class App extends Component {
         <button value='1'  onClick={this.handleNumbers} >1</button>
         <button value='2'  onClick={this.handleNumbers} >2</button>
         <button value='3'  onClick={this.handleNumbers} >3</button>
-        <button value='0'  onClick={this.handleNumbers} className='jumbo'>0</button>
-        <button value='.'  onClick={this.handleDecimal} >.</button>
-        <button value='='  onClick={this.handleEvaluate} style={{
-        background: '#8E42C3',
-        position: 'absolute',
-        height: 130,
-        bottom: 5
-      }}>=</button>
+        <button value='='  onClick={this.handleEvaluate} style={{background: '#8E42C3',position: 'absolute',height: 130, bottom: 5}}>=</button>
+        <button value='0'  onClick={this.handleNumbers} style={{width:160}}>0</button>
+        <button value='.'  onClick={this.handleDecimal} >.</button>     
       </div>
         </div>
       </div>
     )
   }
 };
-
-
 
 export default App;
