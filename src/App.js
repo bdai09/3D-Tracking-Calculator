@@ -43,7 +43,7 @@ class App extends Component {
         }else {
             if(this.state.beforeIs==='num'){
                this.setState({
-               valNew:  /([x/+‑]0)$/.test(this.state.formula) ?this.state.valNew : (this.state.valNew+num.target.value),
+               valNew:  /([x/+‑]0)$/.test(this.state.formula) ?this.state.valNew : (this.state.valNew==='0'?num.target.value:(this.state.valNew+num.target.value)),
                formula: /([x/+‑]0)$/.test(this.state.formula) ?this.state.formula : (this.state.formula +num.target.value),
                beforeIs:'num'
                });
