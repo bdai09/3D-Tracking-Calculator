@@ -8,7 +8,6 @@ class App extends Component {
       valNew: '0',
       valOld: '0',
       formula: '',
-      currentSign: 'pos',
       beforeIs:''
     }
     this.reachMax = this.reachMax.bind(this);
@@ -23,7 +22,6 @@ class App extends Component {
       valNew: '0',
       valOld: '0',
       formula: '',
-      currentSign: 'pos',
       beforeIs:''
     });
   }
@@ -43,21 +41,14 @@ class App extends Component {
         if(this.state.valNew.length > 21) {
              this.reachMax();
         }else {
-            if(this.state.beforeIs==='num'&&num.target.value!=='0'){
+            if(this.state.beforeIs==='num'){
                this.setState({
-               valNew:  /([x/+‑]0)$/.test(this.state.formula) ?this.state.valNew : (this.state.formula+num.target.value),
+               valNew:  /([x/+‑]0)$/.test(this.state.formula) ?this.state.valNew : (this.state.valNew+num.target.value),
                formula: /([x/+‑]0)$/.test(this.state.formula) ?this.state.formula : (this.state.formula +num.target.value),
                beforeIs:'num'
                });
              }
-             if(this.state.beforeIs==='num'&&num.target.value==='0'){
-              this.setState({
-              valNew:  num.target.value,
-              formula: /([x/+‑]0)$/.test(this.state.formula) ?this.state.formula : (this.state.formula +num.target.value),
-              beforeIs:'num'
-              });
-            }
-            if(this.state.beforeIs==='operator'){
+            if(this.state.beforeIs==='operator'||this.state.beforeIs==='decimal'){
                   this.setState({
                   valNew: num.target.value,
                   formula: this.state.formula+num.target.value,
@@ -78,29 +69,45 @@ class App extends Component {
               beforeIs:'num'
               });
             }
+          
     }
   }}
    
-  handleOperators(num) { 
+  handleOperators(i) { 
     if (this.state.valNew!=="Reach Limit") {
-      if(this.state.beforeIs===''){
+      switch(this.state.beforeIs){
+       case '':
+        this.state.formula.indexOf('=')!==-1? 
+        this.setState({
+          valNew: i.target.value,
+          formula: this.state.formula.slice(this.state.formula.indexOf('=')+1)+i.target.value,
+          beforeIs:'operator'
+          }):
         this.setState({
         valNew: '0',
         formula: '',
         beforeIs:''
         });
-      }
-      if(this.state.beforeIs==='num'){
-        this.setState({
-        valNew: num.target.value,
-        formula: this.state.formula+num.target.value,
-        beforeIs:'operator'
-        });
-      }
-      if(this.state.beforeIs==='operator'){
+        break;
+    
+      case 'operator':
         this.setState({
         valNew: this.state.valNew,
         formula: this.state.formula,
+        beforeIs:'operator'
+        });
+        break;
+      case 'decimal':
+        this.setState({
+        valNew: i.target.value,
+        formula: this.state.formula.slice(0, -1)+i.target.value,
+        beforeIs:'operator'
+        });
+        break;
+      case 'num':
+        this.setState({
+        valNew: i.target.value,
+        formula: this.state.formula+i.target.value,
         beforeIs:'operator'
         });
       }
@@ -110,7 +117,10 @@ class App extends Component {
   handleEvaluate(){
     if (this.state.valNew!=="Reach Limit") {
       let expression = this.state.formula;
-      if (this.state.beforeIs==='operator') { expression = expression.slice(0, -1);}
+      if (this.state.beforeIs==='operator'||this.state.beforeIs==='decimal') 
+      { expression = expression.slice(0, -1);}
+      let i=expression.indexOf('=');
+      if(i!==-1) expression = expression.slice(0,i);
         expression = expression.replace(/x/g, "*").replace(/‑/g, "-");
         let answer = Math.round(1000000000000 * eval(expression)) / 1000000000000;
         this.setState({
@@ -126,29 +136,29 @@ class App extends Component {
       if (this.state.valNew.length > 21) {
         this.reachMax();
       } else {
-
-        if(this.state.beforeIs==='num'){
+        switch(this.state.beforeIs){
+        case 'num':
           this.setState({
             valNew: '.',
             formula: this.state.formula + '.',
             beforeIs:'decimal'
           }); 
-        }
-        if(this.state.beforeIs==='decimal'){
+          break;
+        case 'decimal':
           this.setState({
             valNew: '.',
             formula: this.state.formula,
             beforeIs:'decimal'
           }); 
-        } 
-        if(this.state.beforeIs==='operator'){
+          break;
+        case 'operator':
           this.setState({
             valNew: this.state.valNew,
             formula: this.state.formula,
             beforeIs:'operator'
           }); 
-        }
-        if(this.state.beforeIs===''){
+          break;
+        case '':
           this.setState({
             valNew: '0.',
             formula: '0.',
