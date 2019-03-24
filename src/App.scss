@@ -1,14 +1,12 @@
 @import url('https://fonts.googleapis.com/css?family=Sniglet');
 @import url("https://fontlibrary.org/face/couture");
 $digital: 'couture';
-@import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 body{
   background-color: rgb(209, 207, 207)
 }
 
 .formulaScreen {
-  //font-family: $digital;
   min-height: 40px;
   color: #656668;
   text-align: right;
@@ -20,7 +18,6 @@ body{
 
 .outputScreen {
   font-size: 25px;
-  //font-family: $digital;
   color: black;
   text-align: right;
   line-height: 35px;

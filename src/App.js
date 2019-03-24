@@ -153,7 +153,6 @@ class App extends Component {
         formula: expression.replace(/\*/g, '⋅').replace(/-/g, '‑') + '=' + answer,
         beforeIs: ''
       });
-     // document.getElementById("formulaScreen").style.fontSize = "30px";
     }
   }
     
