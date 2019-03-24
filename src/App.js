@@ -8,7 +8,7 @@ class App extends Component {
       valNew: '0',
       valOld: '0',
       formula: '',
-      beforeIs:'',
+      beforeIs:'', //trace previous click is on which category
       offsetX:'',
       offsetY:'',
       friction:1/32
@@ -22,6 +22,7 @@ class App extends Component {
     this.handleNumbers = this.handleNumbers.bind(this);
     this.changeSize=this.changeSize.bind(this);
   }
+  //3d part
   componentDidMount() {
     document.addEventListener('mousemove', this._mouseMove);
   }
@@ -96,19 +97,20 @@ class App extends Component {
             }
           
     }
-  }}
+  }
+}
    
   handleOperators(i) { 
     if (this.state.valNew!=="Reach Limit") {
       switch(this.state.beforeIs){
        case '':
         this.state.formula.indexOf('=')!==-1? 
-        this.setState({
+        this.setState({ //if has calculation body and =
           valNew: i.target.value,
           formula: this.state.formula.slice(this.state.formula.indexOf('=')+1)+i.target.value,
           beforeIs:'operator'
           }):
-        this.setState({
+        this.setState({ //if press +-*/ without enter num first
         valNew: '0',
         formula: '',
         beforeIs:''
@@ -147,12 +149,21 @@ class App extends Component {
       let i=expression.indexOf('=');
       if(i!==-1) expression = expression.slice(0,i);
         expression = expression.replace(/x/g, "*").replace(/‑/g, "-");
-        let answer = Math.round(1000000000000 * eval(expression)) / 1000000000000;
-        this.setState({
-        valNew: answer.toString(),
-        formula: expression.replace(/\*/g, '⋅').replace(/-/g, '‑') + '=' + answer,
-        beforeIs: ''
-      });
+        let answer = (Math.round(1000000000000 * eval(expression)) / 1000000000000).toString();
+        //deal with formula overflow, only keep result
+        if(expression.length+answer.length>20){
+          this.setState({
+            valNew: answer,
+            formula:answer,
+            beforeIs: 'num'
+          });
+        }else{
+          this.setState({
+            valNew: answer,
+            formula: expression.replace(/\*/g, '⋅').replace(/-/g, '‑') + '='+ answer,
+            beforeIs: ''
+          });
+        }   
     }
   }
     
@@ -196,13 +207,14 @@ class App extends Component {
 changeSize(){  //deal with re-size when formula is too long, resize font
   if(this.state.formula!==''){
 let formulaScreen=document.getElementById('formulaScreen');
+let currSize=parseInt(formulaScreen.style.fontSize.replace('px', ''));
 formulaScreen.style.fontSize = "30px"
 let fontSize = parseInt(formulaScreen.style.fontSize.replace('px', ''));
 for (let i = fontSize; i >= 0; i--) {
-  let overflow=(formulaScreen.scrollHeight > formulaScreen.clientHeight || formulaScreen.scrollWidth > formulaScreen.clientWidth);
+  let overflow=(formulaScreen.scrollWidth-10 > formulaScreen.clientWidth);
   if (overflow) {
-   fontSize--;
-   formulaScreen.style.fontSize = fontSize + "px";
+    fontSize--;
+    formulaScreen.style.fontSize = fontSize + "px";
   }
 }
 }}
