@@ -1,38 +1,26 @@
 @import url('https://fonts.googleapis.com/css?family=Sniglet');
 $digital: 'Sniglet', cursive;
-.App {
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: #eaeeb6;
-}
+@import url('https://fonts.googleapis.com/css?family=Montserrat');
 
-.App-body {
-  border: 2px solid #47476b;
-  padding: 5px; 
-  background: black;
-  width: 320px; 
-  position: relative;
+body{
+  background-color: rgb(209, 207, 207)
 }
 
 .formulaScreen {
   font-family: $digital;
   min-height: 40px;
-  font-size: 30px;
   color: rgb(252, 219, 4);
   text-align: right;
   vertical-align: text-top;
   line-height: 30px;
-  overflow-wrap: break-word;
-  word-wrap: break-word; 
+  width: 320px; 
+  height: 20px;
 }
 
-
 .outputScreen {
-  font-size: 25px;
+  font-size: 22px;
   font-family: $digital;
-  color: white;
+  color: black;
   text-align: right;
   line-height: 35px;
 }
@@ -41,22 +29,53 @@ button {
   position: relative;
   height: 65px;
   width: 80px;
-  color: white;
-  outline: 1px solid black;
+  color: black;
+  outline: 2px solid black;
   border: none;
-  background: #4d4d4d;
+  background: whitesmoke;
   font-family: $digital, monospace;
-  font-size: 20px;
+  font-size: 25px;
   cursor: default;
   &:hover {
-    color: black;
-    outline: .05em solid grey;
+    color: rgb(90, 89, 89);
+    outline: 1px solid grey;
     z-index: 3;
   }
 }
 
   
 
+.wrapper{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) perspective(600px) rotateY(20deg) rotateX(10deg);
+  background: #111111;
+  transform-style: preserve-3d;
+  width: 260px;
+  height: 350px;
+  border-radius: 10px;
 
+  & .shape{
+    background: #505152;
+    border-radius: 10px;
+    width: 260px;
+    height: 350px;
+    transform: translateZ(50px) scale(.85);
+    opacity: 0.8;}
 
-
+  & .shape2{
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: 320px;
+    height: 400px;
+    transform: translateZ(150px) translateX(-27px) translateY(-26px) scale(.55);
+    border: 4px solid black;
+    background:white;
+    opacity: 1;
+    border-radius: 8px;}
+  & p{
+    text-align: center;
+  }}
