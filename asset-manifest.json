@@ -1,13 +1,13 @@
 {
-  "main.css": "/Calculator/static/css/main.f9a52d36.chunk.css",
-  "main.js": "/Calculator/static/js/main.63b843ce.chunk.js",
-  "main.js.map": "/Calculator/static/js/main.63b843ce.chunk.js.map",
-  "runtime~main.js": "/Calculator/static/js/runtime~main.8078b280.js",
-  "runtime~main.js.map": "/Calculator/static/js/runtime~main.8078b280.js.map",
-  "static/js/2.4f140dab.chunk.js": "/Calculator/static/js/2.4f140dab.chunk.js",
-  "static/js/2.4f140dab.chunk.js.map": "/Calculator/static/js/2.4f140dab.chunk.js.map",
-  "index.html": "/Calculator/index.html",
-  "precache-manifest.bfb8a1932a214f7273ba5a0ccfd6f020.js": "/Calculator/precache-manifest.bfb8a1932a214f7273ba5a0ccfd6f020.js",
-  "service-worker.js": "/Calculator/service-worker.js",
-  "static/css/main.f9a52d36.chunk.css.map": "/Calculator/static/css/main.f9a52d36.chunk.css.map"
+  "main.css": "/3D-Tracking-Calculator/static/css/main.f9a52d36.chunk.css",
+  "main.js": "/3D-Tracking-Calculator/static/js/main.e0d36e2c.chunk.js",
+  "main.js.map": "/3D-Tracking-Calculator/static/js/main.e0d36e2c.chunk.js.map",
+  "runtime~main.js": "/3D-Tracking-Calculator/static/js/runtime~main.18f0f13c.js",
+  "runtime~main.js.map": "/3D-Tracking-Calculator/static/js/runtime~main.18f0f13c.js.map",
+  "static/js/2.4f140dab.chunk.js": "/3D-Tracking-Calculator/static/js/2.4f140dab.chunk.js",
+  "static/js/2.4f140dab.chunk.js.map": "/3D-Tracking-Calculator/static/js/2.4f140dab.chunk.js.map",
+  "index.html": "/3D-Tracking-Calculator/index.html",
+  "precache-manifest.efb0ef165d16f46ae62f68ad326af57e.js": "/3D-Tracking-Calculator/precache-manifest.efb0ef165d16f46ae62f68ad326af57e.js",
+  "service-worker.js": "/3D-Tracking-Calculator/service-worker.js",
+  "static/css/main.f9a52d36.chunk.css.map": "/3D-Tracking-Calculator/static/css/main.f9a52d36.chunk.css.map"
 }
