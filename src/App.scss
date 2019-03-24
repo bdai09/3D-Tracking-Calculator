@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css?family=Sniglet');
-$digital: 'Sniglet', cursive;
+@import url("https://fontlibrary.org/face/couture");
+$digital: 'couture';
 @import url('https://fonts.googleapis.com/css?family=Montserrat');
 
 body{
@@ -7,9 +8,9 @@ body{
 }
 
 .formulaScreen {
-  font-family: $digital;
+  //font-family: $digital;
   min-height: 40px;
-  color: rgb(252, 219, 4);
+  color: #656668;
   text-align: right;
   vertical-align: text-top;
   line-height: 30px;
@@ -18,11 +19,12 @@ body{
 }
 
 .outputScreen {
-  font-size: 22px;
-  font-family: $digital;
+  font-size: 25px;
+  //font-family: $digital;
   color: black;
   text-align: right;
   line-height: 35px;
+  font-weight: bold;
 }
 
 button {
@@ -30,7 +32,7 @@ button {
   height: 65px;
   width: 80px;
   color: black;
-  outline: 2px solid black;
+  outline: 1.5px solid black;
   border: none;
   background: whitesmoke;
   font-family: $digital, monospace;
@@ -57,7 +59,7 @@ button {
   border-radius: 10px;
 
   & .shape{
-    background: #505152;
+    background: #4e4e4f;
     border-radius: 10px;
     width: 260px;
     height: 350px;

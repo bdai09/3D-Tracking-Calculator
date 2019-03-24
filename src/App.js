@@ -225,7 +225,7 @@ for (let i = fontSize; i >= 0; i--) {
           <div>
         <button value='AC' onClick={this.cleanUp} style={{width:160, background: '#cccdce'}}>AC</button>
         <button value='/'  onClick={this.handleOperators} style={{background: '#cccdce'}}>/</button>
-        <button value='x'  onClick={this.handleOperators} style={{background: '#cccdce'}}>x</button>
+        <button value='x'  onClick={this.handleOperators} style={{background: '#cccdce',fontFamily:'Sniglet'}}>x</button>
         <button value='7'  onClick={this.handleNumbers} >7</button>
         <button value='8'  onClick={this.handleNumbers} >8</button>
         <button value='9'  onClick={this.handleNumbers} >9</button>
